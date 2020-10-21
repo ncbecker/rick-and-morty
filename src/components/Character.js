@@ -1,21 +1,39 @@
+import "./character.css";
 import { createElement } from "../utils/elements";
 
-function CreateCharacter({ name, imgSrc }) {
-  const character = createElement("div", {
-    className: "character",
-    children: [
-      createElement("div", {
-        className: "title",
-        innerText: name,
-      }),
-      createElement("img", {
-        className: "avatar",
-        src: imgSrc,
-        alt: name,
-      }),
-    ],
+function Character({ name, imgSrc }) {
+  const title = createElement("p", {
+    className: "character__title",
+    innerText: name,
   });
-  return character;
+  const avatar = createElement("img", {
+    className: "character__img",
+    src: imgSrc,
+    alt: name,
+  });
+  const container = createElement("article", {
+    className: "character",
+    children: [title, avatar],
+  });
+  return container;
 }
 
-export default CreateCharacter;
+export default Character;
+
+// function CreateCharacter({ name, imgSrc }) {
+//     const character = createElement("div", {
+//       className: "character",
+//       children: [
+//         createElement("div", {
+//           className: "title",
+//           innerText: name,
+//         }),
+//         createElement("img", {
+//           className: "avatar",
+//           src: imgSrc,
+//           alt: name,
+//         }),
+//       ],
+//     });
+//     return character;
+//   }
