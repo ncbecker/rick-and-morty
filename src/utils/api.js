@@ -5,11 +5,21 @@ export async function getCharacterById(id) {
   return character;
 }
 
-export async function getCharacters() {
-  const url = `https://rickandmortyapi.com/api/character/`;
+export async function getCharacters(name) {
+  let url = `https://rickandmortyapi.com/api/character/`;
+  if (name) {
+    url += `?name=${name}`;
+  }
   const response = await fetch(url);
   const data = await response.json();
   return data.results;
+}
+
+export async function getCharactersByName(name) {
+  const url = `https://rickandmortyapi.com/api/character/?name=${name}`;
+  const response = await fetch(url);
+  const charactername = await response.json();
+  return charactername.results;
 }
 
 // return data.results; Aus dem response.json geben wir nur den Array "results" mit 20 Objekten (Charakteren) wieder

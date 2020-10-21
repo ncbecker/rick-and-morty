@@ -2,6 +2,7 @@ import "./app.css";
 import Header from "./components/Header";
 import Characters from "./components/Characters";
 import Character from "../src/components/Character";
+// import CharacterSearch from "../src/components/CharacterSearch";
 import { createElement } from "./utils/elements";
 import { getCharacters } from "./utils/api";
 
@@ -12,27 +13,40 @@ import { getCharacters } from "./utils/api";
 function App() {
   const header = Header();
 
+  // const searchContainer = CharacterSearch();
+
   const characterContainer = Characters();
 
   const main = createElement("main", {
     className: "main",
-    children: [characterContainer],
+    children: [
+      // searchContainer,
+      characterContainer,
+    ],
   });
 
-  async function loadCharacters() {
+  async function loadCharacters(name) {
     // await waitFor(100);
-    const characters = await getCharacters();
+    const characters = await getCharacters(name);
     const characterElements = characters.map((character) =>
       Character({
         name: character.name,
         imgSrc: character.image,
       })
     );
+    characterContainer.innerHTML = "";
     characterContainer.append(...characterElements);
   }
 
+  const searchBar = createElement("input", {
+    onchange: (event) => loadCharacters(event.target.value),
+  });
+
   loadCharacters();
-  const container = createElement("div", { children: [header, main] });
+
+  const container = createElement("div", {
+    children: [header, searchBar, main],
+  });
   return container;
 }
 
