@@ -3,45 +3,62 @@ import Header from "./components/Header";
 import Characters from "./components/Characters";
 import Character from "../src/components/Character";
 import { createElement } from "./utils/elements";
-import { getCharacterById } from "./utils/api";
+import { getCharacters } from "./utils/api";
 
-function waitFor(delay) {
-  return new Promise((res) => setTimeout(res, delay));
-}
+// function waitFor(delay) {
+//   return new Promise((res) => setTimeout(res, delay));
+// }
 
 function App() {
   const header = Header();
 
-  const characters = Characters();
+  const characterContainer = Characters();
 
   const main = createElement("main", {
-    children: [characters],
+    className: "main",
+    children: [characterContainer],
   });
 
-  async function getCharacters() {
-    await waitFor(100);
-    const firstCharacter = await getCharacterById(1);
-    const secondCharacter = await getCharacterById(2);
-    characters.append(
+  async function loadCharacters() {
+    // await waitFor(100);
+    const characters = await getCharacters();
+    const characterElements = characters.map((character) =>
       Character({
-        name: firstCharacter.name,
-        imgSrc: firstCharacter.image,
-      }),
-      Character({
-        name: secondCharacter.name,
-        imgSrc: secondCharacter.image,
+        name: character.name,
+        imgSrc: character.image,
       })
     );
+    characterContainer.append(...characterElements);
   }
 
-  getCharacters();
+  loadCharacters();
   const container = createElement("div", { children: [header, main] });
   return container;
 }
 
 export default App;
 
+// Hinweis: characters.map erstellt aus dem geladenen Array mit den Objekten/Charakteren und seinen Eigenschaften einen neuen Array aus HTML-Elementen (mittels der Character Funktion) und den gemappten Eigenschaften
+
+// Version 1
 // CreateCharacter({
 //   name: "Beth's Mytholog",
 //   imgSrc: "https://rickandmortyapi.com/api/character/avatar/40.jpeg",
 // }),
+
+// Version 2
+// async function loadCharacters() {
+//   await waitFor(100);
+//   const firstCharacter = await getCharacterById(1);
+//   const secondCharacter = await getCharacterById(2);
+//   characterContainer.append(
+//     Character({
+//       name: firstCharacter.name,
+//       imgSrc: firstCharacter.image,
+//     }),
+//     Character({
+//       name: secondCharacter.name,
+//       imgSrc: secondCharacter.image,
+//     })
+//   );
+// }
