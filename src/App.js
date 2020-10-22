@@ -2,6 +2,7 @@ import "./app.css";
 import Header from "./components/Header";
 import Characters from "./components/Characters";
 import Character from "../src/components/Character";
+import Search from "./components/Search";
 // import CharacterSearch from "../src/components/CharacterSearch";
 import { createElement } from "./utils/elements";
 import { getCharacters } from "./utils/api";
@@ -38,14 +39,18 @@ function App() {
     characterContainer.append(...characterElements);
   }
 
-  const searchBar = createElement("input", {
-    onchange: (event) => loadCharacters(event.target.value),
+  const search = Search({
+    onchange: (value) => loadCharacters(value),
   });
+
+  // const searchBar = createElement("input", {
+  //   onchange: (event) => loadCharacters(event.target.value),
+  // });
 
   loadCharacters();
 
   const container = createElement("div", {
-    children: [header, searchBar, main],
+    children: [header, search, main],
   });
   return container;
 }
