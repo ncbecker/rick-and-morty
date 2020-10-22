@@ -12,12 +12,18 @@ import { getCharacters } from "./utils/api";
 // }
 
 function App() {
+  let lastName = null;
+  let nextPage = null;
+
   const header = Header();
 
   const characterContainer = Characters();
 
   const loadMoreButton = Button({
     innerText: "Load more characters",
+    onclick: () => {
+      loadCharacters(lastName, nextPage);
+    },
   });
 
   const main = createElement("main", {
@@ -25,21 +31,28 @@ function App() {
     children: [characterContainer, loadMoreButton],
   });
 
-  async function loadCharacters(name) {
+  async function loadCharacters(name, page) {
     // await waitFor(100);
-    const characters = await getCharacters(name);
-    const characterElements = characters.map((character) =>
+    const characters = await getCharacters(name, page);
+    const characterElements = characters.results.map((character) =>
       Character({
         name: character.name,
         imgSrc: character.image,
       })
     );
-    characterContainer.innerHTML = "";
+
     characterContainer.append(...characterElements);
+
+    nextPage = characters.info.next?.match(/\d+/)[0];
+    loadMoreButton.disabled = !characters.info.next;
+    lastName = name;
   }
 
   const search = Search({
-    onchange: (value) => loadCharacters(value),
+    onchange: (value) => {
+      characterContainer.innerHTML = "";
+      loadCharacters(value);
+    },
   });
 
   // const searchBar = createElement("input", {
