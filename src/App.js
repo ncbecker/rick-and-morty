@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import Characters from "./components/Characters";
 import Character from "../src/components/Character";
 import Search from "./components/Search";
-// import CharacterSearch from "../src/components/CharacterSearch";
+import Button from "./components/Button";
 import { createElement } from "./utils/elements";
 import { getCharacters } from "./utils/api";
 
@@ -14,16 +14,15 @@ import { getCharacters } from "./utils/api";
 function App() {
   const header = Header();
 
-  // const searchContainer = CharacterSearch();
-
   const characterContainer = Characters();
+
+  const loadMoreButton = Button({
+    innerText: "Load more characters",
+  });
 
   const main = createElement("main", {
     className: "main",
-    children: [
-      // searchContainer,
-      characterContainer,
-    ],
+    children: [characterContainer, loadMoreButton],
   });
 
   async function loadCharacters(name) {
