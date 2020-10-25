@@ -31,6 +31,8 @@ function App() {
     children: [characterContainer, loadMoreButton],
   });
 
+  const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
   async function loadCharacters(name, page) {
     // await waitFor(100);
     const characters = await getCharacters(name, page);
@@ -38,6 +40,7 @@ function App() {
       Character({
         name: character.name,
         imgSrc: character.image,
+        isFavorite: favorites.includes(character.name),
       })
     );
 
@@ -46,6 +49,8 @@ function App() {
     nextPage = characters.info.next?.match(/\d+/)[0];
     loadMoreButton.disabled = !characters.info.next;
     lastName = name;
+    // Reappend loadMoreButton to avoid scrolling
+    main.append(loadMoreButton);
   }
 
   const search = Search({
@@ -64,6 +69,15 @@ function App() {
   const container = createElement("div", {
     children: [header, search, main],
   });
+
+  window.addEventListener("scroll", () => {
+    const offsetY =
+      loadMoreButton.offsetParent.offsetHeight - window.innerHeight - 200;
+    if (offsetY < window.pageYOffset) {
+      loadMoreButton.click();
+    }
+  });
+
   return container;
 }
 
